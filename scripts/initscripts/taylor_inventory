@@ -11,7 +11,7 @@
 # Description:		 starts gunicorn running ldaptools using start-stop-daemon
 ### END INIT INFO
 
-OWNER="taylorinv    "
+OWNER="taylorinv"
 NAME="$OWNER"
 PROJECT_NAME="TaylorInventory"
 WSGI_NAME="TaylorInventory"
