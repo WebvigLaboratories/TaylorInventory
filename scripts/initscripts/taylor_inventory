@@ -1,0 +1,86 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# chkconfig: - 90 14
+# Provides:			 gunicorn
+# Required-Start:	 $all
+# Required-Stop:	 $all
+# Default-Start:	 2 3 4 5
+# Default-Stop:		 0 1 6
+# Short-Description: starts the gunicorn server running ldaptools
+# Description:		 starts gunicorn running ldaptools using start-stop-daemon
+### END INIT INFO
+
+OWNER="taylorinv    "
+NAME="$OWNER"
+PROJECT_NAME="TaylorInventory"
+WSGI_NAME="TaylorInventory"
+PORT=31100
+WORKERS=4
+ACCESSLOG="/home/$OWNER/django_logs/access.log"
+ERRORLOG="/home/$OWNER/django_logs/error.log"
+
+VIRTUALENV="$OWNER"
+CONFDIR="/home/$OWNER/$PROJECT_NAME"
+VIRTUALENVDIR="/home/$OWNER/.virtualenvs"
+GUNICORN_RUN="$VIRTUALENVDIR/$VIRTUALENV/bin/gunicorn"
+GUNICORN_LOGS="--access-logfile=$ACCESSLOG --error-logfile=$ERRORLOG"
+BINDIP="127.0.0.1"
+PID="/home/$OWNER/$PROJECT_NAME.pid"
+VENV_ACTIVATION="sh $VIRTUALENVDIR/$VIRTUALENV/bin/activate"
+RETVAL=0
+
+# Source function library.
+#. /etc/rc.d/init.d/functions
+. /lib/lsb/init-functions
+
+if [ -f /etc/gunicorn/gunicorn.conf ] ; then
+	. /etc/gunicorn/gunicorn.conf
+fi
+
+start () {
+    export PYTHONPATH=$PYTHONPATH:$CONFDIR;
+    export DYLD_LIBRARY_PATH=/usr/local/mysql/lib/
+    export LANG=en_US.UTF-8
+    export LC_ALL=en_US.UTF-8
+
+    cd $CONFDIR;
+    su -c "$VENV_ACTIVATION; $GUNICORN_RUN -b $BINDIP:$PORT -n $NAME -w $WORKERS -p $PID $GUNICORN_LOGS -D ${WSGI_NAME}.wsgi:application" $OWNER && echo "OK"
+	RETVAL=$?
+	return $RETVAL
+}
+
+stop () {
+    kill -QUIT `cat $PID` && echo "OK" || echo "failed";
+}
+
+reload () {
+    if [ -f $PID ]; then
+        kill -HUP `cat $PID` && echo "OK" || echo "failed";
+    fi
+}
+
+case "$1" in
+  start)
+		echo "Starting $NAME:"
+		start
+		;;
+  stop)
+		echo "Stopping $NAME:"
+		stop
+		;;
+  restart)
+        echo "Stopping $NAME:"
+		stop
+        sleep 1
+        echo "Starting $NAME:"
+        start
+        ;;
+  *)
+		N=/etc/init.d/$NAME
+		echo "Usage: $N {start|stop|reload}" >&2
+		exit 1
+		;;
+esac
+
+exit 0

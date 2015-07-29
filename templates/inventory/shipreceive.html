@@ -1,0 +1,61 @@
+{% extends "base/site_base.html" %}
+
+{% block extra_script %}
+<script type="text/javascript">
+    $(document).ready(function(){
+       $("[rel=tooltip]").tooltip(); 
+       
+       $('.loading').button();
+       $('.loading').on('click', function(){
+           $(this).button('loading');
+       }); 
+    });
+</script>
+{% endblock %}
+
+{% block head_title %}{{ title }}{% endblock %}
+
+{% block body %}
+<div class="modal hide fade" id="AddVendor">
+    <form action="{% url 'add_vendor' %}" method="post">{% csrf_token %}
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Add New Vendor</h3>
+        </div>
+        <div class="modal-body">
+            <label for="id_name">Vendor Name:</label>
+    		{{ vendorform.name }}
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary loading" data-loading-text="Adding...">Add Vendor</button>
+            <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+        </div>
+    </form>
+</div>
+<div class="row">
+    <div class="span10 offset1">
+        <h3>{{ title }}</h3>
+        {% if form.errors %}
+    		<p class="error">
+    			Please correct the error{{ form.errors|pluralize }} below.
+    		</p>
+    	{% endif %}
+    	<form action="" method="post">{% csrf_token %}
+    	<div class="row">
+    	    <div class="span6">
+    	        <label for="id_item">Select Item Received:</label>
+                {{ form.item.errors }}{{ form.item }}
+            </div>
+    	</div>
+    	<div class="row">
+    	    <div class="span6">
+    	        <label for="id_quantity">Quantity:</label>
+                {{ form.quantity.errors }}{{ form.quantity }}
+    	    </div>
+    	</div>
+    	<div class="center">
+			<button type="submit" class="btn btn-primary loading" data-loading-text="Recording...">{{ buttonaction }} This Item</button>
+		</div>
+    </div>    
+</div>
+{% endblock %}

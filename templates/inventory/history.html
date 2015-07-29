@@ -1,0 +1,26 @@
+{% extends "base/site_base.html" %}
+
+{% block head_title %}History{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="span8 offset2">
+        <ul class="nav nav-pills" id="History">
+            <li class="active"><a href="#User" data-toggle="pill">History</a></li>
+        </ul>
+        
+        <div class="pill-content">
+            <div class="pill-pane active" id="User">
+                <h4>History - Past 90 Days</h4>
+                <table class="table table-condensed table-striped table-bordered">
+                    {% for line in lHistory %}
+                    <tr>
+                        <td>{{ line }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

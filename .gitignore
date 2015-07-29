@@ -1,0 +1,7 @@
+dev.db
+*.pyc
+*.iml
+.idea/
+.coverage
+htmlcov/
+TaylorInventory/*.cfg

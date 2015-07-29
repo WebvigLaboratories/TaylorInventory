@@ -1,0 +1,15 @@
+{% extends "base/site_base.html" %}
+
+{% block head_title %}{{ title }}{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="span8">
+        <h4>Welcome {{ user.first_name }} {{ user.last_name }}</h4>
+        
+        <p>
+            Please contact <a href="mailto:dvigliotti@sixpencetech.com">Dave Vigliotti</a> with questions about this application.<br>
+        </p>
+    </div>    
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base/site_base.html" %}
+
+{% block head_title %}{{ title }}{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="span10 offset1">
+        <h3>{{ title }}</h3>
+        {% if form.errors %}
+    		<p class="error">
+    			Please correct the error{{ form.errors|pluralize }} below.
+    		</p>
+    	{% endif %}
+    	<form action="" method="post">{% csrf_token %}
+    	    
+    	{% if form.hidden.value %}
+    	    <div class="alert">
+    	        NOTICE: This item has been marked as deleted in the database
+    	    </div>
+    	{% endif %}
+		<table class="table table-condensed">
+    		<tr>
+                <th><label for="id_itemnumber">Item Number:</label></th>
+                <td>{{ form.itemnumber.errors }}{{ form.itemnumber }}</td>
+            </tr>
+            <tr>
+                <th><label for="id_description">Description:</label></th>
+                <td>{{ form.description.errors }}{{ form.description }}</td>
+            </tr>
+            <tr>
+                <th><label for="id_vendor">Vendor:</labels></th>
+                <td>{{ form.vendor.errors }}{{ form.vendor }}</td>
+            </tr>
+            <tr>
+                <th><label for="id_quantity">Quantity:</labels></th>
+                <td>{{ form.quantity.errors }}{{ form.quantity }}</td>
+            </tr>
+            <tr>
+                <th><label for="id_cost">Cost:</labels></th>
+                <td>{{ form.cost.errors }}<input type="text" name="cost" value="{{ form.cost.value|floatformat:2}}" id="id_cost" /></td>
+            </tr>
+            {% if form.hidden.value %}
+            <tr>
+                <th><label for="id_hidden">Deleted:</labels></th>
+                <td>{{ form.hidden.errors }}{{ form.hidden }}</td>
+            </tr>
+            {% endif %}
+    	</table>
+    	<div class="center">
+			<button type="submit" class="btn btn-primary">Save Changes</button>
+			<button type="button" class="btn" onclick="window.location = '{% url 'list_inventory' %}' ">Cancel</button>
+		</div>
+    </div>    
+</div>
+{% endblock %}
