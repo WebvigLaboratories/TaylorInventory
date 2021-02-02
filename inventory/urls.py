@@ -1,23 +1,30 @@
-from django.conf.urls import url
+from __future__ import unicode_literals
 
-from views import *
+from django.conf.urls import url
+from django.views.generic import TemplateView
+
+from .views import *
 
 urlpatterns = [
+    url(r'^$', index, name='home'),
+
     # Inventory admin
-    url(r'^add/$', inventoryAdd, name="add_inventory"),
-    url(r'^delete/(\S+)/$', inventoryDelete, name="delete_inventory"),
-    url(r'^edit/(\S+)/$', inventoryEdit, name="edit_inventory"),
-    url(r'^list/$', inventoryList, name="list_inventory"),
-    url(r'^listdeleted/(\S+)/$', inventoryList, name="list_deleted_inventory"),
+    url(r'^add/$', inventory_add, name="add_inventory"),
+    url(r'^delete/(\S+)/$', inventory_delete, name="delete_inventory"),
+    url(r'^edit/(\S+)/$', inventory_edit, name="edit_inventory"),
+    url(r'^list/$', inventory_list, name="list_inventory"),
+    url(r'^listdeleted/(\S+)/$', inventory_list, name="list_deleted_inventory"),
 
     # Vendor
-    url(r'^vendor/add/$', vendorAdd, name="add_vendor"),
+    url(r'^vendor/add/$', vendor_add, name="add_vendor"),
 
     # Shipping/Recieving
-    url(r'^receiving/$', receiveInventory, name="receive_inventory"),
-    url(r'^shipping/$', shipInventory, name="ship_inventory"),
+    url(r'^receiving/$', receive_inventory, name="receive_inventory"),
+    url(r'^shipping/$', ship_inventory, name="ship_inventory"),
 
     # Reports
-    url(r'^reports/total/$', reports, name="reports"),
-    url(r'^history/$', showHistory, name="history"),
+    url(r'^reports/inventoryfinancial/$', report_full_inventory, name="inventory_financial"),
+    url(r'^reports/transactiondaily/(\S+)/$', report_daily_transactions, name="daily_transaction_report"),
+    url(r'^reports/transactioncustom/$', TemplateView.as_view(template_name='reports/select_date_range.html'),
+        name="custom_transaction_report"),
 ]

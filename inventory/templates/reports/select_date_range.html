@@ -1,0 +1,38 @@
+{% extends "base/site_base.html" %}
+{% load static %}
+
+{% block extra_style %}
+    <link href="{% static "css/jquery-ui.min.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block extra_script %}
+    <script src={% static "js/jquery-ui.min.js" %}></script>
+<script>
+    $(function() {
+        $( ".datepicker" ).datepicker();
+    });
+</script>
+{% endblock %}
+
+{% block head_title %}Transaction Report - Custom Date Range{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="span6 offset2">
+        <h3>Transaction Report - Custom Date Range</h3>
+        <form action="{% url "daily_transaction_report" "custom" %}" method="post">{% csrf_token %}
+            <div class="center">
+                <label for="id_start_date">Set Start Date:</label>
+                <input type="textbox" class="datepicker" name="start_date" ><br /><br />
+                <br />
+                <label for="id_end_date">Set End Date:</label>
+                <input type="textbox" class="datepicker" name="end_date" ><br />
+                <br />
+                <button type="submit" class="btn btn-primary">Generate Report</button>
+                <button type="button" class="btn" onclick="window.location = '{% url "home" %}' ">Cancel</button>
+                <br />
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

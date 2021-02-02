@@ -1,5 +1,5 @@
 from django.contrib import admin
-from inventory.models import Vendor, Item, Transaction
+from .models import Vendor, Item, TransactionLog
 
 class VendorAdmin(admin.ModelAdmin):
     list_display = ('vendor_name',)
@@ -13,4 +13,4 @@ class ItemAdmin(admin.ModelAdmin):
 
 admin.site.register(Vendor, VendorAdmin)
 admin.site.register(Item, ItemAdmin)
-admin.site.register(Transaction)
+admin.site.register(TransactionLog)

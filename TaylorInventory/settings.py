@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import socket
-from ConfigParser import ConfigParser
+import dj_database_url
 
 DEVELOPMENT_HOSTS = [
     "Dans-MacBook-Pro.local",
@@ -24,21 +24,17 @@ if socket.gethostname() in DEVELOPMENT_HOSTS:
     DEVELOPMENT = True
     ALLOWED_HOSTS = []
 else:
-    DEVELOPMENT = False
-    ALLOWED_HOSTS = [
-        "taylorinventory.fratellicomputing.com",
-    ]
+    DEVELOPMENT = True
+    ALLOWED_HOSTS = ["*"]
 
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CONFIG_LOCATION = os.path.join(BASE_DIR, "TaylorInventory/taylorinventory.cfg")
-config = ConfigParser()
-config.read(CONFIG_LOCATION)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config.get("settings", "secret_key")
+SECRET_KEY = 'a4&bhpwv+&2j)5v9k!p%cn#8exbj95w&7we^_suz!!@uoqut58'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = DEVELOPMENT
@@ -54,14 +50,13 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
 )
 
 ROOT_URLCONF = 'TaylorInventory.urls'
@@ -86,25 +81,27 @@ WSGI_APPLICATION = 'TaylorInventory.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-DBTYPE = config.get("settings", "db_engine")
-DBNAME = config.get("settings", "db_name")
-DBUSER = config.get("settings", "db_user")
-DBPASSWD = config.get("settings", "db_passwd")
-DBHOST = config.get("settings", "db_host")
-DBPORT = config.get("settings", "db_port")
-
 DATABASES = {
-    'default': {
-        'ENGINE': DBTYPE,
-        'NAME': DBNAME,
-        'USER': DBUSER,
-        'PASSWORD': DBPASSWD,
-        'HOST': DBHOST,
-        'PORT': DBPORT,
-    }
+    'default': dj_database_url.config(conn_max_age=600)
 }
 
+# Password validation
+# https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
@@ -122,7 +119,6 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "TaylorInventory/static"),
-)
+
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')

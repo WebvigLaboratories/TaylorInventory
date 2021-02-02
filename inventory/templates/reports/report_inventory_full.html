@@ -1,0 +1,103 @@
+{% extends "base/site_base.html" %}
+{% load static %}
+
+{% block extra_script %}
+<script type="text/javascript" src="{% static 'js/stupidtable.min.js' %}"></script>
+
+<script type="text/javascript">
+    function filter(selector, query) {
+      query =   $.trim(query); //trim white space
+      query = query.replace(/ /gi, '|'); //add OR for regex query
+
+      $(selector).each(function() {
+        ($(this).text().search(new RegExp(query, "i")) < 0) ? $(this).hide().removeClass('visible') : $(this).show().addClass('visible');
+      });
+
+    }
+
+    $(document).ready(function(){
+       $("#simpletable").stupidtable();
+
+       $('#filter').keyup(function(event) {
+         //if esc is pressed or nothing is entered
+         if (event.keyCode == 27 || $(this).val() == '') {
+           //if esc is pressed we want to clear the value of search box
+           $(this).val('');
+
+           //we want each row to be visible because if nothing
+           //is entered then all rows are matched.
+           $('tbody tr').removeClass('visible').show().addClass('visible');
+         }
+
+         //if there is text, lets filter
+         else {
+           filter('#simpletable tbody tr', $(this).val());
+         };
+       });
+
+        $('#clearfilter').click(function(event) {
+           //if esc is pressed we want to clear the value of search box
+           $('#filter').val('');
+
+           //we want each row to be visible because if nothing
+           //is entered then all rows are matched.
+           $('tbody tr').removeClass('visible').show().addClass('visible');
+       });
+    });
+</script>
+{% endblock %}
+
+{% block head_title %}{{ title }}{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="span10 offset1">
+        <div class="well">
+            <form action="" method="post">{% csrf_token %}
+				Filter Name: <input type="textbox" id="filter" name="filter" />
+                <button class="btn btn-small" type="button" id="clearfilter">Clear</button></br>
+			</form>
+		</div><br / >
+		<table class="table table-striped table-condensed" id="simpletable">
+		    <thead>
+        		<tr>
+        			<th data-sort="string">Item #</th>
+        			<th data-sort="string">Description</th>
+        			<th data-sort="string">Vendor</th>
+        			<th data-sort="int">Quantity</th>
+        			<th data-sort="string">Cost</th>
+        			<th><span class="pull-right">Total</span></th>
+        		</tr>
+        	</thead>
+        	<tbody>
+        		{% for item in items %}
+        		<tr>
+        			<td>{{ item.item_number }}</td>
+        			<td>{{ item.description }}</td>
+        			<td>{{ item.vendor_name }}</td>
+        			<td>{{ item.quantity }}</td>
+        			<td>${{ item.cost|floatformat:2 }}</td>
+        			<td><span class="pull-right itemtotal">${{ item.grand_total|floatformat:2 }}</span></td>
+        		</tr>
+        		{% endfor %}
+        	</tbody>
+        </table><br />
+        <table class="table">
+    		<tr>
+        		<th colspan="6">
+        		    <div class="pull-right">
+        		        GRAND TOTAL
+        		    </div>
+        		</th>
+    		<tr/>
+    		<tr>
+    		    <td colspan="6">
+    		        <div class="pull-right">
+    		            <strong id="grandtotal">${{ grand_total|floatformat:2 }}</strong>
+    		        </div>
+    		    </td>
+    		</tr>
+    	</table>
+    </div>    
+</div>
+{% endblock %}

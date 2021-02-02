@@ -1,7 +1,7 @@
 from django.utils.safestring import mark_safe
 from django.forms import Form,BooleanField,CharField,DecimalField,IntegerField,ModelChoiceField
 
-from models import *
+from .models import *
 
 class InventoryForm(Form):
 
