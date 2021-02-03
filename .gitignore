@@ -8,3 +8,4 @@ TaylorInventory/*.cfg/.blackbox/pubring.gpg~
 /.blackbox/pubring.kbx~
 /.blackbox/secring.gpg
 /Dockerfile
+/TaylorInventory/settings.py

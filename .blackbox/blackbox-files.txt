@@ -1,1 +1,2 @@
 Dockerfile
+TaylorInventory/settings.py
