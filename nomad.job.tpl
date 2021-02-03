@@ -57,11 +57,6 @@ job "taylorinventory" {
         }
       }
 
-      constraint {
-        attribute = "${attr.unique.hostname}"
-        value     = "wolowitz.webvig.local"       # stateful jobs get pinned to a machine
-      }
-
       resources {
         cpu    = 250 # 250 MHz
         memory = 128 # 128MB
