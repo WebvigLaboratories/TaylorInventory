@@ -1,6 +1,6 @@
 
 job "taylorinventory" {
-  datacenters = ["webvig"]
+  datacenters = ["webvig","use"]
   type = "service"
 
   update {
@@ -26,6 +26,12 @@ job "taylorinventory" {
       port "app" {
         to = 30600
       }
+    }
+
+    volume "taylorinventory_staticfiles" {
+      type      = "host"
+      source    = "taylorinventory_staticfiles"
+      read_only = false
     }
 
     service {
@@ -55,6 +61,15 @@ job "taylorinventory" {
           username = "$REGISTRY_USER"
           password = "$REGISTRY_PASS"
         }
+      }
+
+      env {
+        DATABASE_URL = "$DATABASE_URL"
+      }
+
+      volume_mount {
+        volume      = "taylorinventory_staticfiles"
+        destination = "/usr/src/app/staticfiles"
       }
 
       resources {
