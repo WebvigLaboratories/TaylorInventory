@@ -1,7 +1,7 @@
 coverage==5.3.1
 dj-database-url==0.5.0
 dj-static==0.0.6
-Django==1.11.29
+Django==2.2.24
 funcsigs==1.0.2
 gunicorn
 mock==3.0.5
